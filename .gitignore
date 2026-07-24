@@ -1,0 +1,41 @@
+# Generated/local output
+/.cache/
+/.gradle/
+/.gradle-tmp/
+/.gradle-user-home/
+/bin/
+/build/
+/run/
+/de/
+/decomp/
+/decomp-assets/
+/decomp-java/
+/decomp-src/
+/caveDwellerNormalJar/
+/caveDwellerSandOverhaul/
+/D/
+/svCode/
+/userHome/
+/GradleTemp/
+/cache/
+
+# Local tooling
+/.idea/
+/.vscode/
+/.settings/
+/.metadata/
+/eclipse/
+/out/
+*.launch
+*.ipr
+*.iws
+*.iml
+.classpath
+.project
+/run-client-smoke.ps1
+/runClientSmoke.ps1
+
+# Local reverse-engineering inputs/output
+/*.jar
+/*.zip
+/cave_dweller.refmap.json
