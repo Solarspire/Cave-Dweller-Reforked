@@ -1,0 +1,2 @@
+# Preserve reference asset bytes on Windows checkouts.
+common/src/main/resources/assets/** -text whitespace=cr-at-eol
