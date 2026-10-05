@@ -39,3 +39,12 @@
 /*.jar
 /*.zip
 /cave_dweller.refmap.json
+
+**/build/
+**/run/
+**/.gradle/
+**/logs/
+**/config/
+/.superpowers/
+
+/dist/

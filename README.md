@@ -1,28 +1,18 @@
-# Cave Dweller Reimagined (Forge 1.12.2 Backport)
+# Cave Dweller Reforked — Minecraft 1.21.1
 
-This workspace contains a source backport scaffold of `cave_dweller-1.18.2-1.6.4.jar` for Forge `1.12.2`, aligned to a Cleanroom-style development setup.
+Fabric and NeoForge ports based on Cadentem's **1.20.1 / 1.6.4 JAR**.
+The original 1.12.2 backport remains on main. Modern branches: 1.21.1 and 26.2.
 
-## Environment Target
+Install the matching loader and GeckoLib 4.9.3; Fabric also requires Fabric API.
+Use only the JAR for your loader. Requires Java 21.
 
-- Cleanroom Forge dev env reference: `https://github.com/CleanroomMC/ForgeDevEnv`
-- Forge version: `1.12.2`
-- Java toolchain: `8` for compile/run
-- GeckoLib dependency: `software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31`
+Build both: `./gradlew build` (Windows: `.\gradlew.bat build`).
+Outputs: `fabric/build/libs` and `neoforge/build/libs`; install the JAR without `-sources` or `-dev`.
+Dev client: `./gradlew :fabric:runClient` or `./gradlew :neoforge:runClient`.
+Dev server: corresponding `runServer` task.
 
-## Run Dev Client
+Settings: config/cave_dweller.json; restart to apply. Defaults match the reference.
+Summon: `/summon cave_dweller:cave_dweller`. Spawn egg: Spawn Eggs creative tab.
 
-```powershell
-.\gradlew.bat runClient
-```
-
-## Build
-
-```powershell
-.\gradlew.bat build
-```
-
-## Project Layout
-
-- Backported code: `src/main/java/fade/cave_dweller`
-- Mod assets: `src/main/resources/assets/cave_dweller`
-- Decompiled reference: `decomp-java`, `decomp-assets`
+See docs/PORTING.md for provenance, API adaptations and future-port instructions.
+See docs/VALIDATION.md for tested behavior and limitations.

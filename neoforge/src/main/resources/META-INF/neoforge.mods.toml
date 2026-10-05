@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+[[mods]]
+modId="cave_dweller"
+version="${version}"
+displayName="Cave Dweller Reforked"
+authors="Cadentem, SolarSpire"
+description="Modern multi-loader port of Cadentem's Cave Dweller 1.6.4"
+[[dependencies.cave_dweller]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.255,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.cave_dweller]]
+modId="minecraft"
+type="required"
+versionRange="[${minecraft_version}]"
+ordering="NONE"
+side="BOTH"
+[[dependencies.cave_dweller]]
+modId="geckolib"
+type="required"
+versionRange="[${geckolib_version},5)"
+ordering="AFTER"
+side="BOTH"

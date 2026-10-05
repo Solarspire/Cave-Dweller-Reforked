@@ -1,0 +1,15 @@
+plugins { id 'net.neoforged.moddev' }
+neoForge {
+    version = neoforge_version
+    runs {
+        client { client() }
+        server { server(); programArgument '--nogui' }
+        smokeServer { server(); gameDirectory = file('run/smoke'); programArgument '--nogui' }
+    }
+    mods { cave_dweller { sourceSet sourceSets.main } }
+}
+dependencies {
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+}
+
+tasks.named('runSmokeServer', JavaExec) { standardInput = System.in }
