@@ -27,11 +27,15 @@ class Artifacts(unittest.TestCase):
                         item = json.loads(jar.read('assets/cave_dweller/items/cave_dweller_spawn_egg.json'))
                         self.assertEqual('cave_dweller:item/cave_dweller_spawn_egg', item['model']['model'])
                     sounds = json.loads(jar.read('assets/cave_dweller/sounds.json'))
+                    language = json.loads(jar.read('assets/cave_dweller/lang/en_us.json'))
                     for sound in sounds.values():
+                        self.assertIn(sound['subtitle'], language)
                         for entry in sound['sounds']:
                             name = entry if isinstance(entry, str) else entry['name']
                             namespace, name = name.split(':') if ':' in name else ('cave_dweller', name)
                             self.assertGreater(len(jar.read(f'assets/{namespace}/sounds/{name}.ogg')), 0)
+                    for name in ('ServerConfig', 'ConfigValue'):
+                        self.assertGreater(len(jar.read(f'de/cadentem/cave_dweller/config/{name}.class')), 0)
                     self.assertFalse(any(p.startswith('fade/') for p in jar.namelist()))
                     self.assertTrue(any(p.endswith('/entities/CaveDwellerEntity.class') for p in jar.namelist()))
                     if loader == 'fabric':
@@ -41,7 +45,9 @@ class Artifacts(unittest.TestCase):
                         self.assertEqual(PROPERTIES['minecraft_version'], metadata['depends']['minecraft'])
                         self.assertIsInstance(metadata['depends']['geckolib'], str)
                     else:
-                        self.assertIn('cave_dweller', jar.read('META-INF/neoforge.mods.toml').decode())
+                        metadata = jar.read('META-INF/neoforge.mods.toml').decode()
+                        self.assertIn('modId="cave_dweller"', metadata)
+                        self.assertIn('versionRange="[' + PROPERTIES['minecraft_version'] + ']"', metadata)
 
 if __name__ == '__main__':
     unittest.main()

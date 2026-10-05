@@ -13,13 +13,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument('loader', choices=('fabric', 'neoforge'))
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
+properties = dict(line.split('=', 1) for line in (root / 'gradle.properties').read_text().splitlines() if '=' in line)
+world_name = 'smoke-world-' + properties['minecraft_version']
 run = root / args.loader / 'run/smoke'
 run.mkdir(parents=True, exist_ok=True)
 (run / 'config').mkdir(exist_ok=True)
 (run / 'config/cave_dweller.json').write_text(json.dumps({'time_until_leave': 10}))
 (run / 'eula.txt').write_text('eula=true\n')
 (run / 'server.properties').write_text(
-    'online-mode=false\nserver-ip=127.0.0.1\nserver-port=0\nlevel-name=smoke-world\n'
+    f'online-mode=false\nserver-ip=127.0.0.1\nserver-port=0\nlevel-name={world_name}\n'
     'level-type=minecraft:flat\ngenerator-settings={"layers":[{"block":"minecraft:bedrock","height":1},{"block":"minecraft:stone","height":3}],"biome":"minecraft:plains"}\nview-distance=2\nsimulation-distance=2\n'
     'spawn-protection=0\nmax-tick-time=60000\n')
 log_dir = root / '.cache'

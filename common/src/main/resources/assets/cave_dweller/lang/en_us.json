@@ -1,4 +1,25 @@
 {
   "item.cave_dweller.cave_dweller_spawn_egg": "Cave Dweller Spawn Egg",
-  "entity.cave_dweller.cave_dweller": "Cave Dweller"
+  "entity.cave_dweller.cave_dweller": "Cave Dweller",
+  "sounds.cave_dweller:cavenoise_1": "Eerie cave noise",
+  "sound.cave_dweller:cavenoise_2": "Eerie cave noise",
+  "sound.cave_dweller:cavenoise_3": "Eerie cave noise",
+  "sound.cave_dweller:cavenoise_4": "Eerie cave noise",
+  "sound.cave_dweller:chase_step_1": "Cave Dweller footsteps",
+  "sound.cave_dweller:chase_step_2": "Cave Dweller footsteps",
+  "sound.cave_dweller:chase_step_3": "Cave Dweller footsteps",
+  "sound.cave_dweller:chase_step_4": "Cave Dweller footsteps",
+  "sound.cave_dweller:chase_1": "Cave Dweller growls",
+  "sound.cave_dweller:chase_2": "Cave Dweller growls",
+  "sound.cave_dweller:chase_3": "Cave Dweller growls",
+  "sound.cave_dweller:chase_4": "Cave Dweller growls",
+  "sound.cave_dweller:flee_1": "Cave Dweller flees",
+  "sound.cave_dweller:flee_2": "Cave Dweller flees",
+  "sound.cave_dweller:disappear": "Cave Dweller disappears",
+  "sound.cave_dweller:spotted": "Cave Dweller spotted",
+  "sound.cave_dweller:dweller_death": "Cave Dweller dies",
+  "sound.cave_dweller:dweller_hurt_1": "Cave Dweller hurts",
+  "sound.cave_dweller:dweller_hurt_2": "Cave Dweller hurts",
+  "sound.cave_dweller:dweller_hurt_3": "Cave Dweller hurts",
+  "sound.cave_dweller:dweller_hurt_4": "Cave Dweller hurts"
 }

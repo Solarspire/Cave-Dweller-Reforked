@@ -21,7 +21,7 @@ Both artifacts must contain original assets and exact loader/version metadata.
 - [x] Port 1.21.1 common gameplay plus loader registration; test config and artifact contents.
 - [x] Build/smoke-test 1.21.1 Fabric and NeoForge; record evidence and commit.
 - [x] Branch 26.2; adapt Minecraft APIs and GeckoLib 5; test both loaders.
-- [ ] Review branches, record limitations, push verified branches to origin.
+- [x] Review branches, record limitations and prepare verified branches for the requested push to origin.
 
 Ruling: execute authorized work continuously; no added design/plan approval round.
 Ruling: use requested version branches in the clean target checkout; no extra worktree.
