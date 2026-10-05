@@ -14,9 +14,11 @@ parser.add_argument('loader', choices=('fabric', 'neoforge'))
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
 run = root / args.loader / 'run/client-smoke'
-world = run / 'saves/smoke-world'
+properties = dict(line.split('=', 1) for line in (root / 'gradle.properties').read_text().splitlines() if '=' in line)
+world_name = 'smoke-world-' + properties['minecraft_version']
+world = run / 'saves' / world_name
 run.mkdir(parents=True, exist_ok=True)
-shutil.copytree(root / args.loader / 'run/smoke/smoke-world', world, dirs_exist_ok=True)
+shutil.copytree(root / args.loader / 'run/smoke' / world_name, world, dirs_exist_ok=True)
 (run / 'config').mkdir(exist_ok=True)
 (run / 'config/cave_dweller.json').write_text(json.dumps({'time_until_leave': 300}))
 (run / 'options.txt').write_text('renderDistance:4\nsimulationDistance:5\nsoundCategory_master:0.0\npauseOnLostFocus:false\n')
