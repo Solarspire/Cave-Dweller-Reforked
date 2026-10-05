@@ -13,3 +13,5 @@ dependencies {
 }
 
 tasks.named('runSmokeServer', JavaExec) { standardInput = System.in }
+
+neoForge { runs { smokeClient { client(); gameDirectory = file('run/client-smoke'); programArguments.addAll('--quickPlaySingleplayer', "smoke-world-${minecraft_version}") } } }
