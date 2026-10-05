@@ -5,6 +5,7 @@ import unittest
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+PROPERTIES = dict(line.split('=', 1) for line in (ROOT / 'gradle.properties').read_text().splitlines() if '=' in line)
 
 class Artifacts(unittest.TestCase):
     def test_both_loader_artifacts(self):
@@ -18,6 +19,13 @@ class Artifacts(unittest.TestCase):
                                   'textures/entity/cave_dweller_texture.png',
                                   'textures/entity/cave_dweller_eyes_texture.png'):
                         self.assertGreater(len(jar.read('assets/cave_dweller/' + asset)), 0)
+                    if PROPERTIES['geckolib_version'].startswith('5.'):
+                        for kind, extension in (('models', 'geo'), ('animations', 'animation')):
+                            adapted = jar.read(f'assets/cave_dweller/geckolib/{kind}/cave_dweller.{extension}.json')
+                            original = jar.read('assets/cave_dweller/' + ('geo' if kind == 'models' else 'animations') + f'/cave_dweller.{extension}.json')
+                            self.assertEqual(original, adapted)
+                        item = json.loads(jar.read('assets/cave_dweller/items/cave_dweller_spawn_egg.json'))
+                        self.assertEqual('cave_dweller:item/cave_dweller_spawn_egg', item['model']['model'])
                     sounds = json.loads(jar.read('assets/cave_dweller/sounds.json'))
                     for sound in sounds.values():
                         for entry in sound['sounds']:
@@ -30,7 +38,8 @@ class Artifacts(unittest.TestCase):
                         metadata = json.loads(jar.read('fabric.mod.json'))
                         self.assertEqual('cave_dweller', metadata['id'])
                         self.assertTrue(metadata['entrypoints']['client'])
-                        self.assertIn('geckolib', metadata['depends'])
+                        self.assertEqual(PROPERTIES['minecraft_version'], metadata['depends']['minecraft'])
+                        self.assertIsInstance(metadata['depends']['geckolib'], str)
                     else:
                         self.assertIn('cave_dweller', jar.read('META-INF/neoforge.mods.toml').decode())
 

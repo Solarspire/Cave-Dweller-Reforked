@@ -29,6 +29,12 @@ Travel freezing, water movement and damage immunity live on the entity rather th
 Use vanilla step-height/water-movement attributes instead of removed Forge additions/local-variable injection.
 Biome tag namespace changes from forge:is_spooky to c:is_spooky.
 Original goals, behavior rolls, dimensions, sound cadence, configurable defaults and spawn checks remain.
+On 26.2, model/animation resources also use GeckoLib 5 geckolib/models and geckolib/animations paths.
+Animation choices are captured into render state before rendering. Full-bright eyes remain visible
+during invisible encounters, and adult/baby model scales remain 1.3/0.1.
+26.2 spawn eggs use the native iron-golem egg model because vanilla removed the old tinted egg template;
+the entity, original textures and gameplay are unchanged. Resource/data pack formats are 88.0/107.1.
+
 Per-dimension timers clear when a server stops; despawning runs on the server only.
 
 Server settings use config/cave_dweller.json on both loaders; restart to apply changes.

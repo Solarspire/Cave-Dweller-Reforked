@@ -70,7 +70,7 @@ extends Goal {
         if (!this.followTargetEvenIfNotSeen) {
             return !this.caveDweller.getNavigation().isDone();
         }
-        return this.caveDweller.isWithinRestriction(target.blockPosition());
+        return this.caveDweller.isWithinHome(target.blockPosition());
     }
 
     public void start() {
@@ -152,7 +152,7 @@ extends Goal {
         if (distanceToTarget <= attackReach && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
             this.caveDweller.swing(InteractionHand.MAIN_HAND);
-            this.caveDweller.doHurtTarget((Entity)target);
+            this.caveDweller.doHurtTarget((net.minecraft.server.level.ServerLevel)this.caveDweller.level(), target);
         }
     }
 

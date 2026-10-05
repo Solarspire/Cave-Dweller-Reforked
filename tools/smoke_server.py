@@ -62,9 +62,13 @@ def send(command):
 
 try:
     expect(r'Done \([\d.,]+s\)', timeout=480)
-    send('summon cave_dweller:cave_dweller 0 -60 0')
+    send('forceload add 0 0')
+    expect(r'Marked chunk|already marked|No chunks were marked')
+    send('kill @e[type=cave_dweller:cave_dweller]')
+    expect(r'Killed|No entity was found|No entities found')
+    send('summon cave_dweller:cave_dweller 0 -60 0 {Tags:["port_smoke"]}')
     expect(r'Summoned new')
-    selector = '@e[type=cave_dweller:cave_dweller,limit=1]'
+    selector = '@e[type=cave_dweller:cave_dweller,tag=port_smoke,limit=1]'
     send(f'data get entity {selector} Health')
     expect(r'60\.0f')
     send(f'damage {selector} 10 minecraft:in_wall')
@@ -78,6 +82,11 @@ try:
     time.sleep(12)
     send(f'data get entity {selector} Health')
     expect(r'No entity was found|No entities found')
+    # Leave a nearby entity for the optional client resource/render smoke test.
+    send('setworldspawn 0 -60 0')
+    expect(r'Set the world spawn')
+    send('summon cave_dweller:cave_dweller 3 -60 3 {PersistenceRequired:1b}')
+    expect(r'Summoned new')
     send('stop')
     expect(r'Stopping server')
     code = process.wait(timeout=90)

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -72,7 +72,7 @@ public class Utils {
                 return true;
             }
             Holder biome = serverLevel.getBiome(blockPosition);
-            if (biome.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("c", "is_cave"))) || biome.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("c", "is_underground")))) {
+            if (biome.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.Identifier.fromNamespaceAndPath("c", "is_cave"))) || biome.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.BIOME, net.minecraft.resources.Identifier.fromNamespaceAndPath("c", "is_underground")))) {
                 return false;
             }
             int baseSkyLightLevel = serverLevel.getBrightness(LightLayer.SKY, blockPosition) - serverLevel.getSkyDarken();
@@ -83,12 +83,12 @@ public class Utils {
         return false;
     }
 
-    public static <T extends Mob> Optional<T> trySpawnMob(@NotNull Entity currentVictim, EntityType<T> entityType, MobSpawnType spawnType, ServerLevel level, BlockPos blockPosition, int attempts, int xzOffset, int yOffset, SpawnUtil.Strategy strategy) {
+    public static <T extends Mob> Optional<T> trySpawnMob(@NotNull Entity currentVictim, EntityType<T> entityType, EntitySpawnReason spawnType, ServerLevel level, BlockPos blockPosition, int attempts, int xzOffset, int yOffset, SpawnUtil.Strategy strategy) {
         BlockPos.MutableBlockPos mutableBlockPosition = blockPosition.mutable();
         for (int i = 0; i < attempts; ++i) {
             T entity;
-            int xOffset = Mth.randomBetweenInclusive((RandomSource)level.random, (int)(-xzOffset), (int)xzOffset);
-            int zOffset = Mth.randomBetweenInclusive((RandomSource)level.random, (int)(-xzOffset), (int)xzOffset);
+            int xOffset = Mth.randomBetweenInclusive((RandomSource)level.getRandom(), (int)(-xzOffset), (int)xzOffset);
+            int zOffset = Mth.randomBetweenInclusive((RandomSource)level.getRandom(), (int)(-xzOffset), (int)xzOffset);
             mutableBlockPosition.setWithOffset((Vec3i)blockPosition, xOffset, yOffset, zOffset);
             if (!level.getWorldBorder().isWithinBounds((BlockPos)mutableBlockPosition) || !findSpawnFloor(level, yOffset, mutableBlockPosition, strategy) || !((entity = entityType.create(level, null, (BlockPos)mutableBlockPosition, spawnType, false, false)) instanceof CaveDwellerEntity)) continue;
             if (entity.checkSpawnRules((LevelAccessor)level, spawnType) && entity.checkSpawnObstruction((LevelReader)level)) {

@@ -9,7 +9,9 @@ neoForge {
     mods { cave_dweller { sourceSet sourceSets.main } }
 }
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 }
 
 tasks.named('runSmokeServer', JavaExec) { standardInput = System.in }
+
+neoForge { runs { smokeClient { client(); gameDirectory = file('run/client-smoke'); programArguments.addAll('--quickPlaySingleplayer', 'smoke-world') } } }
