@@ -13,13 +13,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument('loader', choices=('fabric', 'neoforge'))
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
+properties = dict(line.split('=', 1) for line in (root / 'gradle.properties').read_text().splitlines() if '=' in line)
+world_name = 'smoke-world-' + properties['minecraft_version']
 run = root / args.loader / 'run/smoke'
 run.mkdir(parents=True, exist_ok=True)
 (run / 'config').mkdir(exist_ok=True)
 (run / 'config/cave_dweller.json').write_text(json.dumps({'time_until_leave': 10}))
 (run / 'eula.txt').write_text('eula=true\n')
 (run / 'server.properties').write_text(
-    'online-mode=false\nserver-ip=127.0.0.1\nserver-port=0\nlevel-name=smoke-world\n'
+    f'online-mode=false\nserver-ip=127.0.0.1\nserver-port=0\nlevel-name={world_name}\n'
     'level-type=minecraft:flat\ngenerator-settings={"layers":[{"block":"minecraft:bedrock","height":1},{"block":"minecraft:stone","height":3}],"biome":"minecraft:plains"}\nview-distance=2\nsimulation-distance=2\n'
     'spawn-protection=0\nmax-tick-time=60000\n')
 log_dir = root / '.cache'
@@ -62,9 +64,13 @@ def send(command):
 
 try:
     expect(r'Done \([\d.,]+s\)', timeout=480)
-    send('summon cave_dweller:cave_dweller 0 -60 0')
+    send('forceload add 0 0')
+    expect(r'Marked chunk|already marked|No chunks were marked')
+    send('kill @e[type=cave_dweller:cave_dweller]')
+    expect(r'Killed|No entity was found|No entities found')
+    send('summon cave_dweller:cave_dweller 0 -60 0 {Tags:["port_smoke"]}')
     expect(r'Summoned new')
-    selector = '@e[type=cave_dweller:cave_dweller,limit=1]'
+    selector = '@e[type=cave_dweller:cave_dweller,tag=port_smoke,limit=1]'
     send(f'data get entity {selector} Health')
     expect(r'60\.0f')
     send(f'damage {selector} 10 minecraft:in_wall')
@@ -78,6 +84,11 @@ try:
     time.sleep(12)
     send(f'data get entity {selector} Health')
     expect(r'No entity was found|No entities found')
+    # Leave a nearby entity for the optional client resource/render smoke test.
+    send('setworldspawn 0 -60 0')
+    expect(r'Set the world spawn')
+    send('summon cave_dweller:cave_dweller 3 -60 3 {PersistenceRequired:1b}')
+    expect(r'Summoned new')
     send('stop')
     expect(r'Stopping server')
     code = process.wait(timeout=90)

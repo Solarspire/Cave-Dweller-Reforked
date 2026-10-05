@@ -16,6 +16,6 @@
     "minecraft": "${minecraft_version}",
     "java": ">=${java_version}",
     "fabric-api": "*",
-    "geckolib": [">=${geckolib_version}", "<5"]
+    "geckolib": ">=${geckolib_version} <5"
   }
 }

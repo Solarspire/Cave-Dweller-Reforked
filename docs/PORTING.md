@@ -27,6 +27,7 @@ Use vanilla sound packets for private ambient sounds (position, volume and pitch
 Use a Cave Dweller navigation subclass instead of fragile global pathfinding mixins.
 Travel freezing, water movement and damage immunity live on the entity rather than Forge event handlers.
 Use vanilla step-height/water-movement attributes instead of removed Forge additions/local-variable injection.
+Missing English sound subtitle translations in the reference assets are supplied.
 Biome tag namespace changes from forge:is_spooky to c:is_spooky.
 Original goals, behavior rolls, dimensions, sound cadence, configurable defaults and spawn checks remain.
 Per-dimension timers clear when a server stops; despawning runs on the server only.
