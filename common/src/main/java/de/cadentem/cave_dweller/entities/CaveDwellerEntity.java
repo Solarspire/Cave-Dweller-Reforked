@@ -22,7 +22,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +33,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -52,30 +52,32 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.LoopType;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
 
 public class CaveDwellerEntity
 extends Monster
 implements GeoEntity {
+    public static final com.geckolib.constant.dataticket.DataTicket<RawAnimation> ANIMATION =
+            com.geckolib.constant.dataticket.DataTicket.create("cave_dweller_animation", new com.google.common.reflect.TypeToken<RawAnimation>() {});
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache((GeoAnimatable)this);
-    private final RawAnimation CHASE = RawAnimation.begin().then("animation.cave_dweller.new_run", Animation.LoopType.LOOP);
-    private final RawAnimation CHASE_IDLE = RawAnimation.begin().then("animation.cave_dweller.run_idle", Animation.LoopType.LOOP);
-    private final RawAnimation CROUCH_RUN = RawAnimation.begin().then("animation.cave_dweller.crouch_run_new", Animation.LoopType.LOOP);
-    private final RawAnimation CROUCH_IDLE = RawAnimation.begin().then("animation.cave_dweller.crouch_idle", Animation.LoopType.LOOP);
-    private final RawAnimation CALM_RUN = RawAnimation.begin().then("animation.cave_dweller.calm_move", Animation.LoopType.LOOP);
-    private final RawAnimation CALM_STILL = RawAnimation.begin().then("animation.cave_dweller.calm_idle", Animation.LoopType.LOOP);
-    private final RawAnimation IS_SPOTTED = RawAnimation.begin().then("animation.cave_dweller.spotted", Animation.LoopType.HOLD_ON_LAST_FRAME);
-    private final RawAnimation CRAWL = RawAnimation.begin().then("animation.cave_dweller.crawl", Animation.LoopType.LOOP);
-    private final RawAnimation FLEE = RawAnimation.begin().then("animation.cave_dweller.flee", Animation.LoopType.LOOP);
+    private final RawAnimation CHASE = RawAnimation.begin().then("animation.cave_dweller.new_run", LoopType.LOOP);
+    private final RawAnimation CHASE_IDLE = RawAnimation.begin().then("animation.cave_dweller.run_idle", LoopType.LOOP);
+    private final RawAnimation CROUCH_RUN = RawAnimation.begin().then("animation.cave_dweller.crouch_run_new", LoopType.LOOP);
+    private final RawAnimation CROUCH_IDLE = RawAnimation.begin().then("animation.cave_dweller.crouch_idle", LoopType.LOOP);
+    private final RawAnimation CALM_RUN = RawAnimation.begin().then("animation.cave_dweller.calm_move", LoopType.LOOP);
+    private final RawAnimation CALM_STILL = RawAnimation.begin().then("animation.cave_dweller.calm_idle", LoopType.LOOP);
+    private final RawAnimation IS_SPOTTED = RawAnimation.begin().then("animation.cave_dweller.spotted", LoopType.HOLD_ON_LAST_FRAME);
+    private final RawAnimation CRAWL = RawAnimation.begin().then("animation.cave_dweller.crawl", LoopType.LOOP);
+    private final RawAnimation FLEE = RawAnimation.begin().then("animation.cave_dweller.flee", LoopType.LOOP);
     public static final EntityDataAccessor<Boolean> FLEEING_ACCESSOR = SynchedEntityData.defineId(CaveDwellerEntity.class, (EntityDataSerializer)EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> CROUCHING_ACCESSOR = SynchedEntityData.defineId(CaveDwellerEntity.class, (EntityDataSerializer)EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> CRAWLING_ACCESSOR = SynchedEntityData.defineId(CaveDwellerEntity.class, (EntityDataSerializer)EntityDataSerializers.BOOLEAN);
@@ -101,7 +103,7 @@ implements GeoEntity {
     }
 
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull EntitySpawnReason reason, @Nullable SpawnGroupData spawnData) {
         this.setAttribute(this.getAttribute(Attributes.MAX_HEALTH), (Double)ServerConfig.MAX_HEALTH.get());
         this.setAttribute(this.getAttribute(Attributes.ATTACK_DAMAGE), (Double)ServerConfig.ATTACK_DAMAGE.get());
         this.setAttribute(this.getAttribute(Attributes.ATTACK_SPEED), (Double)ServerConfig.ATTACK_SPEED.get());
@@ -169,15 +171,15 @@ implements GeoEntity {
         return false;
     }
 
-    public boolean startRiding(@NotNull Entity vehicle, boolean force) {
+    public boolean startRiding(@NotNull Entity vehicle, boolean force, boolean sendEvent) {
         if (((Boolean)ServerConfig.ALLOW_RIDING.get()).booleanValue()) {
-            return super.startRiding(vehicle, force);
+            return super.startRiding(vehicle, force, sendEvent);
         }
         return false;
     }
 
     public void tick() {
-        if (!level().isClientSide && --this.ticksTillRemove <= 0) {
+        if (!level().isClientSide() && --this.ticksTillRemove <= 0) {
             this.disappear();
         }
         if (this.goalSelector.getAvailableGoals().isEmpty() || this.targetSelector.getAvailableGoals().isEmpty()) {
@@ -270,46 +272,50 @@ implements GeoEntity {
         CaveDwellerNavigation navigation = new CaveDwellerNavigation(this, level);
         navigation.setMaxVisitedNodesMultiplier(4.0f);
         navigation.setCanOpenDoors(true);
-        navigation.setCanPassDoors(true);
+        navigation.getNodeEvaluator().setCanPassDoors(true);
         return navigation;
     }
 
-    private PlayState predicate(AnimationState<CaveDwellerEntity> state) {
+    public RawAnimation selectAnimation(boolean moving) {
         boolean isCurrentAboveSolid = this.level().getBlockState(this.blockPosition().above()).isSolid();
         boolean unsure = this.isCrawling() && this.level().getBlockState(this.blockPosition()).isSolid();
         boolean isCurrentTwoAboveSolid = this.level().getBlockState(this.blockPosition().above(2)).isSolid();
         if (isCurrentAboveSolid || unsure) {
-            return state.setAndContinue(this.CRAWL);
+            return this.CRAWL;
         }
         if (isCurrentTwoAboveSolid) {
-            if (state.isMoving()) {
-                return state.setAndContinue(this.CROUCH_RUN);
+            if (moving) {
+                return this.CROUCH_RUN;
             }
-            return state.setAndContinue(this.CROUCH_IDLE);
+            return this.CROUCH_IDLE;
         }
         if (this.isAggressive()) {
-            if (state.isMoving()) {
-                return state.setAndContinue(this.CHASE);
+            if (moving) {
+                return this.CHASE;
             }
-            return state.setAndContinue(this.CHASE_IDLE);
+            return this.CHASE_IDLE;
         }
         if (((Boolean)this.entityData.get(FLEEING_ACCESSOR)).booleanValue()) {
-            if (state.isMoving()) {
-                return state.setAndContinue(this.FLEE);
+            if (moving) {
+                return this.FLEE;
             }
-            return state.setAndContinue(this.CHASE_IDLE);
+            return this.CHASE_IDLE;
         }
-        if (this.pleaseStopMoving || ((Boolean)this.entityData.get(SPOTTED_ACCESSOR)).booleanValue() && !state.isMoving()) {
-            return state.setAndContinue(this.IS_SPOTTED);
+        if (this.pleaseStopMoving || ((Boolean)this.entityData.get(SPOTTED_ACCESSOR)).booleanValue() && !moving) {
+            return this.IS_SPOTTED;
         }
-        if (state.isMoving()) {
-            return state.setAndContinue(this.CALM_RUN);
+        if (moving) {
+            return this.CALM_RUN;
         }
-        return state.setAndContinue(this.CALM_STILL);
+        return this.CALM_STILL;
+    }
+
+    private PlayState predicate(AnimationTest<CaveDwellerEntity> state) {
+        return state.setAndContinue(state.getDataOrDefault(ANIMATION, this.CALM_STILL));
     }
 
     public void registerControllers(AnimatableManager.ControllerRegistrar registrar) {
-        registrar.add(new AnimationController<>(this, "controller", 3, this::predicate));
+        registrar.add(new AnimationController<>("controller", 3, this::predicate));
     }
 
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -329,7 +335,7 @@ implements GeoEntity {
         this.level().playSound(null, (Entity)this, soundEvent, SoundSource.HOSTILE, volume, pitch);
     }
 
-    private void playBlockPosSound(ResourceLocation soundResource, float volume, float pitch) {
+    private void playBlockPosSound(Identifier soundResource, float volume, float pitch) {
         Level level = this.level();
         if (level instanceof ServerLevel) {
             ServerLevel serverLevel = (ServerLevel)level;
@@ -367,7 +373,7 @@ implements GeoEntity {
     }
 
     public void playDisappearSound() {
-        this.playBlockPosSound(((SoundEvent)ModSounds.DISAPPEAR.get()).getLocation(), 3.0f, 1.0f);
+        this.playBlockPosSound(((SoundEvent)ModSounds.DISAPPEAR.get()).location(), 3.0f, 1.0f);
     }
 
     public void playFleeSound() {
@@ -437,7 +443,7 @@ implements GeoEntity {
     protected void tickDeath() {
         super.tickDeath();
         if (!this.alreadyPlayedDeathSound) {
-            this.playBlockPosSound(((SoundEvent)ModSounds.DWELLER_DEATH.get()).getLocation(), 2.0f, 1.0f);
+            this.playBlockPosSound(((SoundEvent)ModSounds.DWELLER_DEATH.get()).location(), 2.0f, 1.0f);
             this.alreadyPlayedDeathSound = true;
         }
     }
@@ -472,7 +478,7 @@ implements GeoEntity {
         double d2 = this.getY() + ((double)this.getRandom().nextInt((int)radius) - radius / 2.0) - targetPosition.y * radius;
         double d3 = this.getZ() + (this.getRandom().nextDouble() - 0.5) * (radius / 2.0) - targetPosition.z * radius;
         BlockPos.MutableBlockPos validPosition = new BlockPos.MutableBlockPos(d1, d2, d3);
-        while (validPosition.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState((BlockPos)validPosition).blocksMotion()) {
+        while (validPosition.getY() > this.level().getMinY() && !this.level().getBlockState((BlockPos)validPosition).blocksMotion()) {
             validPosition.move(Direction.DOWN);
         }
         this.teleportTo(validPosition.getX(), validPosition.getY(), validPosition.getZ());
@@ -503,20 +509,20 @@ implements GeoEntity {
     }
 
     @Override
-    public void knockback(double strength, double x, double z) {
-        if (!isClimbing()) super.knockback(strength, x, z);
+    public void knockback(double strength, double x, double z, DamageSource source, float damage, boolean flag) {
+        if (!isClimbing()) super.knockback(strength, x, z, source, damage, flag);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         boolean obstructed = source.is(net.minecraft.world.damagesource.DamageTypes.DROWN)
                 || source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD);
         if (obstructed || source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL)
                 || source.is(net.minecraft.world.damagesource.DamageTypes.FALL)) {
-            if (obstructed && !level().isClientSide && ++obstructedHits > 5) {
+            if (obstructed && !level().isClientSide() && ++obstructedHits > 5) {
                 obstructedHits = 0;
                 if (!teleportToTarget()) {
-                    String key = level().dimension().location().toString();
+                    String key = level().dimension().identifier().toString();
                     de.cadentem.cave_dweller.CaveDweller.speedUpTimers(key,
                             (int)(ServerConfig.CAN_SPAWN_MIN.get() * 0.3),
                             (int)(ServerConfig.RESET_NOISE_MIN.get() * 0.3));
@@ -526,6 +532,6 @@ implements GeoEntity {
             }
             return false;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(level, source, amount);
     }
 }

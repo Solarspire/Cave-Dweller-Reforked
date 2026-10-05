@@ -1,10 +1,10 @@
-# Cave Dweller Reforked — Minecraft 1.21.1
+# Cave Dweller Reforked — Minecraft 26.2
 
 Fabric and NeoForge ports based on Cadentem's **1.20.1 / 1.6.4 JAR**.
 The original 1.12.2 backport remains on main. Modern branches: 1.21.1 and 26.2.
 
-Install the matching loader and GeckoLib 4.9.3; Fabric also requires Fabric API.
-Use only the JAR for your loader. Requires Java 21.
+Install the matching loader and GeckoLib 5.5.5; Fabric also requires Fabric API.
+Use only the JAR for your loader. Requires Java 25.
 
 Build both: `./gradlew build` (Windows: `.\gradlew.bat build`).
 Outputs: `fabric/build/libs` and `neoforge/build/libs`; install the JAR without `-sources` or `-dev`.

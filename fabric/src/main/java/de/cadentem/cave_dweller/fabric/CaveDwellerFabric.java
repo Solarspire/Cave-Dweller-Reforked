@@ -7,11 +7,11 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.item.*;
@@ -19,12 +19,12 @@ public final class CaveDwellerFabric implements ModInitializer {
     public void onInitialize() {
         ServerConfig.load(FabricLoader.getInstance().getConfigDir());
         var type = Registry.register(BuiltInRegistries.ENTITY_TYPE, id("cave_dweller"),
-                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build("cave_dweller:cave_dweller"));
+                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("cave_dweller", "cave_dweller"))));
         ModEntityTypes.CAVE_DWELLER = () -> type;
         FabricDefaultAttributeRegistry.register(type, CaveDwellerEntity.getAttributeBuilder());
         Item egg = Registry.register(BuiltInRegistries.ITEM, id("cave_dweller_spawn_egg"),
-                new SpawnEggItem(type, 0x706F6F, 0xD0D0D0, new Item.Properties()));
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
+                new SpawnEggItem(new Item.Properties().setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ITEM, id("cave_dweller_spawn_egg"))).spawnEgg(type)));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
         ModSounds.CAVENOISE_1 = registerSound("cavenoise_1");
         ModSounds.CAVENOISE_2 = registerSound("cavenoise_2");
         ModSounds.CAVENOISE_3 = registerSound("cavenoise_3");
@@ -54,5 +54,5 @@ public final class CaveDwellerFabric implements ModInitializer {
         SoundEvent sound = Registry.register(BuiltInRegistries.SOUND_EVENT, id(name), SoundEvent.createVariableRangeEvent(id(name)));
         return () -> sound;
     }
-    private static ResourceLocation id(String name) { return ResourceLocation.fromNamespaceAndPath("cave_dweller", name); }
+    private static Identifier id(String name) { return Identifier.fromNamespaceAndPath("cave_dweller", name); }
 }

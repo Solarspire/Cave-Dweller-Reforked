@@ -1,6 +1,10 @@
 # Changelog
 
-## [1.0.0] - 2023-09-15
+## 1.6.4-reforked.1 — Minecraft 26.2
 
-### Added
-- This is a default template changelog that follows the [KeepAChangelog Convention](https://keepachangelog.com/en/1.1.0/)
+- Fabric and NeoForge ports of Cadentem's 1.20.1/1.6.4 JAR gameplay and assets.
+- Java 25, unobfuscated Minecraft APIs and GeckoLib 5 render states/resources.
+- Shared common gameplay with separate loader registration and pinned dependencies.
+- JSON configuration, scoped navigation, vanilla attributes and private sound packets.
+- Dedicated-server and client smoke-test tooling; see docs/VALIDATION.md for exact evidence and gaps.
+- Version branches preserve the existing main backport and provide a base for future ports.

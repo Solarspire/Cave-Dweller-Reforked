@@ -20,7 +20,7 @@ Both artifacts must contain original assets and exact loader/version metadata.
 - [x] Audit reference JAR, map decompiled classes by descriptor and record provenance.
 - [x] Port 1.21.1 common gameplay plus loader registration; test config and artifact contents.
 - [x] Build/smoke-test 1.21.1 Fabric and NeoForge; record evidence and commit.
-- [ ] Branch 26.2; adapt Minecraft APIs and GeckoLib 5; test both loaders.
+- [x] Branch 26.2; adapt Minecraft APIs and GeckoLib 5; test both loaders.
 - [ ] Review branches, record limitations, push verified branches to origin.
 
 Ruling: execute authorized work continuously; no added design/plan approval round.
