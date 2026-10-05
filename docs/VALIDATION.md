@@ -1,4 +1,4 @@
-# Validation — Minecraft 1.21.1
+# Validation â€” Minecraft 1.21.1
 
 Tested on Windows, Java21 toolchain (Gradle hosted on Java25), Fabric Loader0.19.5,
 FabricAPI0.116.17+1.21.1, NeoForge21.1.255 and GeckoLib4.9.3.
@@ -7,7 +7,7 @@ FabricAPI0.116.17+1.21.1, NeoForge21.1.255 and GeckoLib4.9.3.
   3 config tests per loader, zero failures.
 - python tools/verify_artifacts.py: both final artifacts contain entity/config classes,
   exact Minecraft metadata and all sounds/models/textures; every subtitle key has an English
-  translation; no fade/backport classes.
+  translation; no fade/backport classes. Reference asset bytes are protected from Git EOL conversion.
 - python tools/smoke_server.py fabric and neoforge: real dedicated servers start, summon60HP,
   reject suffocation/fall damage, take10generic damage to50HP, despawn after configured10seconds
   and stop cleanly. Explicit chunk loading and a tagged test entity isolate repeat runs.
@@ -16,7 +16,7 @@ FabricAPI0.116.17+1.21.1, NeoForge21.1.255 and GeckoLib4.9.3.
   and killed the test player; this is a basic attack check.
 - Independent review compared remapped reference JAR, all8goals, navigation, damage behavior,
   water conversion and asset bytes. Surface-biome defects and Fabric dependency bounds fixed.
-  Git tracks configuration sources/tests. Missing reference subtitles found by the client
+  Git tracks configuration sources/tests. Both loaders also passed a build from a clean Git archive. Missing reference subtitles found by the client
   were fixed and verified in both packaged artifacts.
 
 Not verified: visual appearance/head motion/eyes/audio quality, natural timer spawning, all
