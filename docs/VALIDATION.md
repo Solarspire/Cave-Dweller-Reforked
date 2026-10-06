@@ -29,3 +29,17 @@ Logs are local under .cache. Development offline profiles produce expected auth4
 warnings; Windows performance-counter warnings are unrelated to the mod.
 
 The 1.21.1 branch records its own Java21/GeckoLib4 validation.
+
+## Reforked.2 — bundled dependency checks
+
+- Both 26.2 final artifacts build and pass config and nested-JAR checks.
+- python tools/smoke_bundled.py fabric and neoforge launch actual production loaders,
+  using only the built mod (plus Fabric API on Fabric). Both pass without standalone GeckoLib
+  and with standalone GeckoLib5.5.5: startup, one selected GeckoLib, registered spawn egg
+  in a barrel inventory, summon60HP and clean shutdown. Standalone mod takes priority.
+- Original JAR inspection confirms GeckoLib was a required separate dependency, not embedded.
+- These tests verify packaging and item registration. They do not claim manual egg-click,
+  creative-menu or visual testing; the previous gameplay/visual limits remain.
+
+Production harness downloads pinned official installers and uses disposable localhost-only
+.cache/production saves. It accepts Minecraft EULA for those test servers only.
