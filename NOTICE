@@ -4,3 +4,7 @@ Original gameplay and assets retain their attribution. Port adaptations by Solar
 Reference SHA256: 2c243cad05887b40841401abdbb6256473ef4a05be65fc076d68dba34a90d8c1.
 
 Classic spawn-egg layer textures are from Minecraft 1.20.1 by Mojang.
+
+Sound assets imported from Fade's provided 1.12.2 backport JAR.
+Audio source SHA256: 2955e8ad39bbae916a6dc72f07806cfd30901928a64222f339596190e9961e98.
+Modern gameplay remains based on Cadentem's 1.20.1 reference.

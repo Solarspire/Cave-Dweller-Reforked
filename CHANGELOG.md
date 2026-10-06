@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.4-reforked.4 - Minecraft 26.2
+
+- Import all 22 sounds from the supplied 1.12.2 JAR, including both tension variants and disappearance audio.
+- Stop each dweller's tension track before chase, flee, disappearance, death or removal.
+- Keep simultaneous dwellers' audio independent and stream the long tension tracks.
+
 ## 1.6.4-reforked.3 - Minecraft 26.2
 
 - Restore the original classic spawn-egg appearance and exact reference colors.
