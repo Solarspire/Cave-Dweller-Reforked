@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.4-reforked.2 — Minecraft 1.21.1
+
+- Bundle GeckoLib via native loader JAR-in-JAR; compatible standalone mods take priority.
+- Verify built production JARs both with and without standalone GeckoLib.
+- Verify the Cave Dweller spawn-egg item and document its give command.
+
+
 ## 1.6.4-reforked.1 — Minecraft 1.21.1
 
 - Fabric and NeoForge ports of Cadentem's 1.20.1/1.6.4 JAR gameplay and assets.

@@ -9,7 +9,12 @@ neoForge {
     mods { cave_dweller { sourceSet sourceSets.main } }
 }
 dependencies {
-    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    jarJar(implementation("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}")) {
+        version {
+            strictly "[${geckolib_version},5)"
+            prefer geckolib_version
+        }
+    }
 }
 
 tasks.named('runSmokeServer', JavaExec) { standardInput = System.in }
