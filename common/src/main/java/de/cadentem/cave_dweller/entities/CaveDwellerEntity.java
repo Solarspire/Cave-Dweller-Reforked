@@ -14,6 +14,7 @@ import de.cadentem.cave_dweller.registry.ModSounds;
 import de.cadentem.cave_dweller.util.Utils;
 import java.util.List;
 import java.util.Random;
+import java.util.function.BiConsumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -89,7 +90,11 @@ implements GeoEntity {
     private int ticksTillRemove;
     private int chaseSoundClock;
     private boolean alreadyPlayedFleeSound;
-    private boolean alreadyPlayedSpottedSound;
+    private static final byte START_STARE_SOUND = 100;
+    private static final byte STOP_STARE_SOUND = 101;
+    // Client entrypoints install playback; dedicated servers keep the no-op handler.
+    public static BiConsumer<CaveDwellerEntity, Boolean> clientStareAudio = (entity, playing) -> {};
+    private boolean stareSoundPlaying;
     private boolean startedPlayingChaseSound;
     private boolean alreadyPlayedDeathSound;
 
@@ -154,6 +159,7 @@ implements GeoEntity {
     }
 
     public void disappear() {
+        this.stopStareSound();
         this.playDisappearSound();
         this.discard();
     }
@@ -209,9 +215,6 @@ implements GeoEntity {
             this.setClimbing(this.horizontalCollision);
             this.entityData.set(CROUCHING_ACCESSOR, shouldCrouch);
             this.setCrawling(shouldCrawl);
-        }
-        if (((Boolean)this.entityData.get(SPOTTED_ACCESSOR)).booleanValue()) {
-            this.playSpottedSound();
         }
         this.refreshDimensions();
         this.getNavigation().setSpeedModifier(this.getSpeedModifier());
@@ -339,6 +342,7 @@ implements GeoEntity {
     }
 
     public void playChaseSound() {
+        this.stopStareSound();
         if (this.startedPlayingChaseSound || this.isMoving()) {
             if (this.chaseSoundClock <= 0) {
                 Random rand = new Random();
@@ -371,6 +375,7 @@ implements GeoEntity {
     }
 
     public void playFleeSound() {
+        this.stopStareSound();
         if (!this.alreadyPlayedFleeSound) {
             Random rand = new Random();
             switch (rand.nextInt(2)) {
@@ -386,11 +391,48 @@ implements GeoEntity {
         }
     }
 
-    private void playSpottedSound() {
-        if (!this.alreadyPlayedSpottedSound) {
-            this.playEntitySound((SoundEvent)ModSounds.SPOTTED.get(), 3.0f, 1.0f);
-            this.alreadyPlayedSpottedSound = true;
+    public void playStareSound() {
+        if (this.level() instanceof ServerLevel server && !this.stareSoundPlaying) {
+            this.stareSoundPlaying = true;
+            server.broadcastEntityEvent(this, START_STARE_SOUND);
         }
+    }
+
+    public void stopStareSound() {
+        if (!this.stareSoundPlaying) return;
+        this.stareSoundPlaying = false;
+        if (this.level() instanceof ServerLevel server) {
+            server.broadcastEntityEvent(this, STOP_STARE_SOUND);
+        } else {
+            clientStareAudio.accept(this, false);
+        }
+    }
+
+    public boolean isStareSoundPlaying() {
+        return this.stareSoundPlaying && this.isAlive() && !this.isRemoved();
+    }
+
+    @Override
+    public void handleEntityEvent(byte event) {
+        if (event == START_STARE_SOUND || event == STOP_STARE_SOUND) {
+            this.stareSoundPlaying = event == START_STARE_SOUND;
+            clientStareAudio.accept(this, this.stareSoundPlaying);
+        } else {
+            super.handleEntityEvent(event);
+        }
+    }
+
+    @Override
+    public void setAggressive(boolean aggressive) {
+        // This stop packet precedes any chase sound packet on the same connection.
+        if (aggressive) this.stopStareSound();
+        super.setAggressive(aggressive);
+    }
+
+    @Override
+    public void remove(Entity.RemovalReason reason) {
+        this.stopStareSound();
+        super.remove(reason);
     }
 
     private void resetChaseSoundClock() {
@@ -435,6 +477,7 @@ implements GeoEntity {
     }
 
     protected void tickDeath() {
+        this.stopStareSound();
         super.tickDeath();
         if (!this.alreadyPlayedDeathSound) {
             this.playBlockPosSound(((SoundEvent)ModSounds.DWELLER_DEATH.get()).getLocation(), 2.0f, 1.0f);
