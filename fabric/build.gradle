@@ -10,4 +10,4 @@ loom { runs { server { programArg 'nogui' } } }
 
 loom { runs { smokeServer { server(); runDir 'run/smoke'; programArg 'nogui' } } }
 
-loom { runs { smokeClient { client(); runDir 'run/client-smoke'; programArgs '--quickPlaySingleplayer', "smoke-world-${minecraft_version}" } } }
+loom { runs { smokeClient { client(); runDir 'run/client-smoke'; programArgs project.hasProperty('smokeServerAddress') ? '--quickPlayMultiplayer' : '--quickPlaySingleplayer', project.findProperty('smokeServerAddress') ?: "smoke-world-${minecraft_version}" } } }
