@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.4-reforked.3 - Minecraft 26.2
+
+- Restore the original classic spawn-egg appearance and exact reference colors.
+- Retain Spawn Eggs creative-tab registration on Fabric and NeoForge.
+
 ## 1.6.4-reforked.2 — Minecraft 26.2
 
 - Bundle GeckoLib via native loader JAR-in-JAR; compatible standalone mods take priority.
