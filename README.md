@@ -17,3 +17,5 @@ Summon: `/summon cave_dweller:cave_dweller`. Spawn egg: Spawn Eggs creative tab,
 
 See docs/PORTING.md for provenance, API adaptations and future-port instructions.
 See docs/VALIDATION.md for tested behavior and limitations.
+
+Natural-spawn requirements, timing and AFK troubleshooting: docs/NATURAL_SPAWNING.md.

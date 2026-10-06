@@ -19,7 +19,7 @@ FabricAPI0.116.17+1.21.1, NeoForge21.1.255 and GeckoLib4.9.3.
   Git tracks configuration sources/tests. Both loaders also passed a build from a clean Git archive. Missing reference subtitles found by the client
   were fixed and verified in both packaged artifacts.
 
-Not verified: visual appearance/head motion/eyes/audio quality, natural timer spawning, all
+Not verified: visual appearance/head motion/eyes/audio quality, all
 chase/stare/flee transitions, tight-tunnel crawling, wall climbing, door breaking and repeated
 drowning/void escape. Client smoke is log-based and does not assert these gameplay outcomes.
 
@@ -43,3 +43,32 @@ unrelated to the mod. The 26.2 branch records its own Java25/GeckoLib5 validatio
 
 Production harness downloads pinned official installers and uses disposable localhost-only
 .cache/production saves. It accepts Minecraft EULA for those test servers only.
+
+## Natural-spawn audit
+
+- Compared server-tick registration, player eligibility, timers and candidate
+  checks with the supplied 1.20.1/1.6.4 reference JAR. Natural spawning is
+  present; no missing gameplay logic required porting.
+- `python tools/smoke_natural.py fabric` and `neoforge`: packaged production
+  servers with bundled GeckoLib and real AFK clients reject Creative,
+  Spectator and surface Survival at Y=60. A stationary Survival player in a
+  covered cave at Y=-60 then triggers a natural spawn with 60 HP.
+- The test accelerates only spawn timing/chance and suppresses ambient noise;
+  the default player, lighting, dimension, 16-block separation and path checks
+  remain enabled. Each negative phase lasts eight seconds, exceeding the
+  accelerated five-second timer; the timer remains paused until eligibility.
+  No summon or spawn egg is used. Both loaders on this branch pass.
+- Default 5-10 minute/20-minute timing and the 0.5% per-tick roll were audited
+  against the original; the live checks use accelerated timing rather than a
+  full default-duration soak. Arbitrary cave geometries and every AI transition
+  remain outside this test.
+
+Reproduce after building both artifacts and preparing the production loaders
+with `tools/smoke_bundled.py LOADER --prepare-only`. Set JAVA_HOME to a Gradle
+JDK and pass `--java PATH` to smoke_natural.py for the production server
+(Java21 on 1.21.1, Java25 on 26.2). The default artifact is the versioned JAR
+in LOADER/build/libs; `--artifact PATH` can select a distributed JAR. Logs are
+under .cache/production/VERSION/LOADER/natural.log and natural-client.log.
+The harness uses only its disposable production world and development client
+directory, accepts the test server EULA through the preparation step, and
+terminates only the client process tree it started. Personal saves are not used.
