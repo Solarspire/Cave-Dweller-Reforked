@@ -1,5 +1,7 @@
 """Verify packaged loader metadata and runtime assets, not source layout."""
 import json
+import io
+import tomllib
 from pathlib import Path
 import unittest
 import zipfile
@@ -15,6 +17,25 @@ class Artifacts(unittest.TestCase):
                         if not p.name.endswith(('-sources.jar', '-dev.jar'))]
                 self.assertEqual(1, len(jars), f'{loader}: run gradlew build first')
                 with zipfile.ZipFile(jars[0]) as jar:
+                    if loader == 'fabric':
+                        nested = json.loads(jar.read('fabric.mod.json'))['jars']
+                        paths = [entry['file'] for entry in nested if 'geckolib' in entry['file']]
+                    else:
+                        nested = json.loads(jar.read('META-INF/jarjar/metadata.json'))['jars']
+                        paths = [entry['path'] for entry in nested if 'geckolib' in entry['identifier']['artifact']]
+                    self.assertEqual(1, len(paths), 'Bundle exactly one GeckoLib mod via loader-native JAR-in-JAR')
+                    with zipfile.ZipFile(io.BytesIO(jar.read(paths[0]))) as gecko:
+                        if loader == 'fabric':
+                            info = json.loads(gecko.read('fabric.mod.json'))
+                            self.assertEqual('geckolib', info['id'])
+                            self.assertEqual(PROPERTIES['geckolib_version'], info['version'])
+                        else:
+                            info = tomllib.loads(gecko.read('META-INF/neoforge.mods.toml').decode())
+                            self.assertEqual('geckolib', info['mods'][0]['modId'])
+                            self.assertEqual(PROPERTIES['geckolib_version'], info['mods'][0]['version'])
+                    self.assertFalse(any(p.startswith(('com/geckolib/', 'software/bernie/geckolib/')) for p in jar.namelist()))
+                    egg_model = json.loads(jar.read('assets/cave_dweller/models/item/cave_dweller_spawn_egg.json'))
+                    self.assertTrue(egg_model.get('parent'))
                     for asset in ('geo/cave_dweller.geo.json', 'animations/cave_dweller.animation.json',
                                   'textures/entity/cave_dweller_texture.png',
                                   'textures/entity/cave_dweller_eyes_texture.png'):

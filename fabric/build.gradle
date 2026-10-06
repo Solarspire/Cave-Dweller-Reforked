@@ -4,6 +4,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     implementation "com.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
+    include "com.geckolib:geckolib-fabric-${minecraft_version}:${geckolib_version}"
 }
 loom { runs { server { programArg 'nogui' } } }
 
