@@ -92,7 +92,14 @@
   "spotted": {
     "subtitle": "sound.cave_dweller:spotted",
     "sounds": [
-      "cave_dweller:spotted"
+      {
+        "name": "cave_dweller:spotted",
+        "stream": true
+      },
+      {
+        "name": "cave_dweller:spotted_2",
+        "stream": true
+      }
     ]
   },
   "dweller_death": {
