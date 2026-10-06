@@ -42,7 +42,13 @@ extends Goal {
         return true;
     }
 
+    @Override
+    public void start() {
+        this.caveDweller.playStareSound();
+    }
+
     public void stop() {
+        this.caveDweller.stopStareSound();
         super.stop();
         this.lookedAtCount = 0;
         this.wasNotLookingPreviously = false;
