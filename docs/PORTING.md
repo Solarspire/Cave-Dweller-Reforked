@@ -43,3 +43,17 @@ startup tests. In a client, verify spawn egg/summon, animations, emissive eyes, 
 chase/stare/flee, one-block crawling, wall climbing, door breaking and despawning.
 An artifact build does not prove interactive gameplay. Record exact results in docs/VALIDATION.md.
 Only push tested implementation branches. Never replace main or force-push.
+
+## Bundled GeckoLib
+
+The original 1.20.1/1.6.4 JAR does not embed GeckoLib: no nested JARs or GeckoLib classes;
+its mods.toml requires GeckoLib4.2+. Reforked.2 deliberately improves installation.
+Fabric uses Loom include; NeoForge uses ModDevGradle JarJar with a compatible version range.
+GeckoLib keeps its mod ID, original package names and metadata. It is not shaded or relocated.
+A compatible standalone GeckoLib for the same Minecraft/loader takes priority over the nested
+fallback. Loader resolution selects one mod, preventing duplicate classes/mixins.
+Incompatible Minecraft, loader or GeckoLib-major versions remain unsupported.
+When porting, update both compile and embedded dependency coordinates/version ranges.
+
+The Cave Dweller spawn egg is registered and appears in Spawn Eggs on both loaders.
+Its item ID is cave_dweller:cave_dweller_spawn_egg; /give @s accepts that ID.

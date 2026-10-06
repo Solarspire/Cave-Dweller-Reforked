@@ -29,3 +29,17 @@ that development server; use it only when you accept that EULA. Client smoke cop
 mutes sound and terminates only its own test process tree after observation. Personal saves are
 never used. Logs are local under .cache; development auth/performance-counter warnings are
 unrelated to the mod. The 26.2 branch records its own Java25/GeckoLib5 validation.
+
+## Reforked.2 — bundled dependency checks
+
+- Both 1.21.1 final artifacts build and pass config and nested-JAR checks.
+- python tools/smoke_bundled.py fabric and neoforge launch actual production loaders,
+  using only the built mod (plus Fabric API on Fabric). Both pass without standalone GeckoLib
+  and with standalone GeckoLib4.9.3: startup, one selected GeckoLib, registered spawn egg
+  in a barrel inventory, summon60HP and clean shutdown. Standalone mod takes priority.
+- Original JAR inspection confirms GeckoLib was a required separate dependency, not embedded.
+- These tests verify packaging and item registration. They do not claim manual egg-click,
+  creative-menu or visual testing; the previous gameplay/visual limits remain.
+
+Production harness downloads pinned official installers and uses disposable localhost-only
+.cache/production saves. It accepts Minecraft EULA for those test servers only.
