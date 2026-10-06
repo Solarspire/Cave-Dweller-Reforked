@@ -27,7 +27,7 @@ public final class CaveDwellerNeoForge {
                 EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build("cave_dweller:cave_dweller"));
         var items = DeferredRegister.createItems("cave_dweller");
         var egg = items.register("cave_dweller_spawn_egg", () ->
-                new DeferredSpawnEggItem(ModEntityTypes.CAVE_DWELLER, 0x706F6F, 0xD0D0D0, new Item.Properties()));
+                new DeferredSpawnEggItem(ModEntityTypes.CAVE_DWELLER, 0xC4C4C4, 0x0C0F3D, new Item.Properties()));
         var sounds = DeferredRegister.create(Registries.SOUND_EVENT, "cave_dweller");
         ModSounds.CAVENOISE_1 = sounds.register("cavenoise_1", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("cave_dweller", "cavenoise_1")));
         ModSounds.CAVENOISE_2 = sounds.register("cavenoise_2", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("cave_dweller", "cavenoise_2")));
