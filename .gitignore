@@ -48,3 +48,10 @@
 /.superpowers/
 
 /dist/
+
+# Local documentation, test tools and Gradle wrapper
+/docs/
+/tools/
+/gradle/
+/gradlew
+/gradlew.bat
