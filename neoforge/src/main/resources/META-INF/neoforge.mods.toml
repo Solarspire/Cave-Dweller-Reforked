@@ -10,7 +10,7 @@ description="Modern multi-loader port of Cadentem's Cave Dweller 1.6.4"
 [[dependencies.cave_dweller]]
 modId="neoforge"
 type="required"
-versionRange="[26.2.0.88,)"
+versionRange="[26.3.0.77,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.cave_dweller]]

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.4-reforked.5 - Minecraft 26.3
+
+- Port Fabric and NeoForge to Minecraft 26.3 with bundled GeckoLib 5.5.7.
+- Preserve the classic spawn egg, reference sounds and per-dweller stare-audio cutoff.
+
 ## 1.6.4-reforked.4 - Minecraft 26.2
 
 - Import all 22 sounds from the supplied 1.12.2 JAR, including both tension variants and disappearance audio.
