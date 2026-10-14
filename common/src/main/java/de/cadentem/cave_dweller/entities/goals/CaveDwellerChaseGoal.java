@@ -6,6 +6,7 @@ import de.cadentem.cave_dweller.entities.goals.Roll;
 import de.cadentem.cave_dweller.util.Utils;
 import java.util.EnumSet;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -151,7 +152,7 @@ extends Goal {
         double attackReach = this.getAttackReachSqr(target);
         if (distanceToTarget <= attackReach && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
-            this.caveDweller.swing(InteractionHand.MAIN_HAND);
+            this.caveDweller.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT);
             this.caveDweller.doHurtTarget((net.minecraft.server.level.ServerLevel)this.caveDweller.level(), target);
         }
     }

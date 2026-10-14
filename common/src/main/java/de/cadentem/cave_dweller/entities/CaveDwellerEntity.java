@@ -49,6 +49,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -521,7 +522,9 @@ implements GeoEntity {
         double d2 = this.getY() + ((double)this.getRandom().nextInt((int)radius) - radius / 2.0) - targetPosition.y * radius;
         double d3 = this.getZ() + (this.getRandom().nextDouble() - 0.5) * (radius / 2.0) - targetPosition.z * radius;
         BlockPos.MutableBlockPos validPosition = new BlockPos.MutableBlockPos(d1, d2, d3);
-        while (validPosition.getY() > this.level().getMinY() && !this.level().getBlockState((BlockPos)validPosition).blocksMotion()) {
+        while (validPosition.getY() > this.level().getMinY()) {
+            BlockState ground = this.level().getBlockState(validPosition);
+            if (ground.isSolid() && !ground.is(Blocks.COBWEB) && !ground.is(Blocks.BAMBOO_SAPLING)) break;
             validPosition.move(Direction.DOWN);
         }
         this.teleportTo(validPosition.getX(), validPosition.getY(), validPosition.getZ());
@@ -571,7 +574,7 @@ implements GeoEntity {
                             (int)(ServerConfig.RESET_NOISE_MIN.get() * 0.3));
                     disappear();
                 }
-                hurtMarked = true;
+                this.markHurt();
             }
             return false;
         }

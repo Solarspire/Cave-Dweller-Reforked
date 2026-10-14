@@ -1,14 +1,14 @@
-# Cave Dweller Reforked - Minecraft 26.2
+# Cave Dweller Reforked - Minecraft 26.3
 
 Fabric and NeoForge ports of Cadentem's Minecraft 1.20.1 / Cave Dweller 1.6.4.
-The original 1.12.2 backport remains on `main`.
+The original 1.12.2 backport remains on `1.12.2`.
 
 ## Installation
 
-- Requires Minecraft 26.2 and Java 25.
+- Requires Minecraft 26.3 and Java 25.
 - Install the JAR matching your loader: Fabric or NeoForge.
 - Fabric also requires Fabric API.
-- GeckoLib 5.5.5 is bundled. A compatible standalone GeckoLib JAR
+- GeckoLib 5.5.7 is bundled. A compatible standalone GeckoLib JAR
   for the same Minecraft version and loader takes priority; only one copy loads.
 
 ## Gameplay and settings
