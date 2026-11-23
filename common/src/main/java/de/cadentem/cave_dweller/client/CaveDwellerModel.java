@@ -1,6 +1,6 @@
 package de.cadentem.cave_dweller.client;
-import com.geckolib.model.GeoModel;
-import com.geckolib.renderer.base.GeoRenderState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
 import net.minecraft.resources.Identifier;
 public final class CaveDwellerModel extends GeoModel<CaveDwellerEntity> {

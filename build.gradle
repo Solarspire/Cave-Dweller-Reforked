@@ -1,6 +1,6 @@
 plugins {
     id 'base'
-    id 'net.fabricmc.fabric-loom' version '1.17.21' apply false
+    id 'fabric-loom' version '1.17.21' apply false
     id 'net.neoforged.moddev' version '2.0.148' apply false
 }
 subprojects {
@@ -16,7 +16,7 @@ subprojects {
     }
     repositories {
         mavenCentral()
-        maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'; content { includeGroup 'com.geckolib' } }
+        maven { url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'; content { includeGroup 'software.bernie.geckolib' } }
     }
     dependencies {
         testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
@@ -27,7 +27,7 @@ subprojects {
     tasks.withType(Test).configureEach { useJUnitPlatform() }
     processResources {
         def props = [version: project.version, minecraft_version: minecraft_version, java_version: java_version,
-                     fabric_loader_version: fabric_loader_version, geckolib_version: geckolib_version]
+                     fabric_loader_version: fabric_loader_version, geckolib_version: geckolib_version, neoforge_version: neoforge_version]
         inputs.properties props
         filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) { expand props }
     }

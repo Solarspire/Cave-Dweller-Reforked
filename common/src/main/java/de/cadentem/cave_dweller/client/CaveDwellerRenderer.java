@@ -1,9 +1,9 @@
 package de.cadentem.cave_dweller.client;
-import com.geckolib.constant.DataTickets;
-import com.geckolib.constant.DefaultAnimations;
-import com.geckolib.renderer.GeoEntityRenderer;
-import com.geckolib.renderer.base.BoneSnapshots;
-import com.geckolib.renderer.base.RenderPassInfo;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.constant.DefaultAnimations;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.base.BoneSnapshots;
+import software.bernie.geckolib.renderer.base.RenderPassInfo;
 import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 public final class CaveDwellerRenderer extends GeoEntityRenderer<CaveDwellerEntity, CaveDwellerRenderState> {

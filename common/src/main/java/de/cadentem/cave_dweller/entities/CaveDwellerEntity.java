@@ -53,22 +53,22 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.geckolib.animatable.GeoEntity;
-import com.geckolib.animatable.GeoAnimatable;
-import com.geckolib.animatable.instance.AnimatableInstanceCache;
-import com.geckolib.animatable.manager.AnimatableManager;
-import com.geckolib.animation.object.LoopType;
-import com.geckolib.animation.AnimationController;
-import com.geckolib.animation.state.AnimationTest;
-import com.geckolib.animation.RawAnimation;
-import com.geckolib.animation.object.PlayState;
-import com.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animation.object.LoopType;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.state.AnimationTest;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class CaveDwellerEntity
 extends Monster
 implements GeoEntity {
-    public static final com.geckolib.constant.dataticket.DataTicket<RawAnimation> ANIMATION =
-            com.geckolib.constant.dataticket.DataTicket.create("cave_dweller_animation", new com.google.common.reflect.TypeToken<RawAnimation>() {});
+    public static final software.bernie.geckolib.constant.dataticket.DataTicket<RawAnimation> ANIMATION =
+            software.bernie.geckolib.constant.dataticket.DataTicket.create("cave_dweller_animation", RawAnimation.class);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache((GeoAnimatable)this);
     private final RawAnimation CHASE = RawAnimation.begin().then("animation.cave_dweller.new_run", LoopType.LOOP);
     private final RawAnimation CHASE_IDLE = RawAnimation.begin().then("animation.cave_dweller.run_idle", LoopType.LOOP);
@@ -552,8 +552,8 @@ implements GeoEntity {
     }
 
     @Override
-    public void knockback(double strength, double x, double z, DamageSource source, float damage, boolean flag) {
-        if (!isClimbing()) super.knockback(strength, x, z, source, damage, flag);
+    public void knockback(double strength, double x, double z) {
+        if (!isClimbing()) super.knockback(strength, x, z);
     }
 
     @Override

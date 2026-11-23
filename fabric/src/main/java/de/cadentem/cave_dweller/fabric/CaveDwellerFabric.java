@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,7 +24,7 @@ public final class CaveDwellerFabric implements ModInitializer {
         FabricDefaultAttributeRegistry.register(type, CaveDwellerEntity.getAttributeBuilder());
         Item egg = Registry.register(BuiltInRegistries.ITEM, id("cave_dweller_spawn_egg"),
                 new SpawnEggItem(new Item.Properties().setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.ITEM, id("cave_dweller_spawn_egg"))).spawnEgg(type)));
-        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
         ModSounds.CAVENOISE_1 = registerSound("cavenoise_1");
         ModSounds.CAVENOISE_2 = registerSound("cavenoise_2");
         ModSounds.CAVENOISE_3 = registerSound("cavenoise_3");
