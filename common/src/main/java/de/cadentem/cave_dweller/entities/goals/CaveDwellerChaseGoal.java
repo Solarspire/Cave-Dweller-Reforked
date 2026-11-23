@@ -71,7 +71,7 @@ extends Goal {
         if (!this.followTargetEvenIfNotSeen) {
             return !this.caveDweller.getNavigation().isDone();
         }
-        return this.caveDweller.isWithinRestriction(target.blockPosition());
+        return this.caveDweller.isWithinHome(target.blockPosition());
     }
 
     public void start() {
