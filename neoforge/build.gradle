@@ -9,7 +9,7 @@ neoForge {
     mods { cave_dweller { sourceSet sourceSets.main } }
 }
 dependencies {
-    jarJar(implementation("com.geckolib:geckolib-neoforge-${minecraft_version}")) {
+    jarJar(implementation("com.geckolib:geckolib-neoforge-26.1")) {
         version {
             strictly "[${geckolib_version},6)"
             prefer geckolib_version
