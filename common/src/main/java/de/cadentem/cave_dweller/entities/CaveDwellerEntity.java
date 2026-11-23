@@ -23,7 +23,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -57,11 +57,11 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animation.object.LoopType;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.state.AnimationTest;
+import software.bernie.geckolib.animation.Animation.LoopType;
+import software.bernie.geckolib.animatable.processing.AnimationController;
+import software.bernie.geckolib.animatable.processing.AnimationTest;
 import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.object.PlayState;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class CaveDwellerEntity
@@ -338,7 +338,7 @@ implements GeoEntity {
         this.level().playSound(null, (Entity)this, soundEvent, SoundSource.HOSTILE, volume, pitch);
     }
 
-    private void playBlockPosSound(Identifier soundResource, float volume, float pitch) {
+    private void playBlockPosSound(ResourceLocation soundResource, float volume, float pitch) {
         Level level = this.level();
         if (level instanceof ServerLevel) {
             ServerLevel serverLevel = (ServerLevel)level;
@@ -565,7 +565,7 @@ implements GeoEntity {
             if (obstructed && !level().isClientSide() && ++obstructedHits > 5) {
                 obstructedHits = 0;
                 if (!teleportToTarget()) {
-                    String key = level().dimension().identifier().toString();
+                    String key = level().dimension().location().toString();
                     de.cadentem.cave_dweller.CaveDweller.speedUpTimers(key,
                             (int)(ServerConfig.CAN_SPAWN_MIN.get() * 0.3),
                             (int)(ServerConfig.RESET_NOISE_MIN.get() * 0.3));

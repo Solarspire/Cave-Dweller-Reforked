@@ -3,7 +3,7 @@ import java.util.List;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 public final class ServerConfig {
     public static final ConfigValue<Integer> CAN_SPAWN_MIN = new ConfigValue<>("can_spawn_min", 300, 0, 86400);
@@ -43,8 +43,8 @@ public final class ServerConfig {
         if (entity == null || !(entity.level() instanceof ServerLevel level)) return false;
         var biome = level.getBiome(entity.blockPosition());
         boolean listed = OVERRIDE_BIOME_DATAPACK_CONFIG.get()
-                ? biome.unwrapKey().map(key -> SURFACE_BIOMES.get().contains(key.identifier().toString())).orElse(false)
-                : biome.is(TagKey.create(Registries.BIOME, Identifier.fromNamespaceAndPath("cave_dweller", "cave_dweller_surface_biomes")));
+                ? biome.unwrapKey().map(key -> SURFACE_BIOMES.get().contains(key.location().toString())).orElse(false)
+                : biome.is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath("cave_dweller", "cave_dweller_surface_biomes")));
         return SURFACE_BIOMES_IS_WHITELIST.get() == listed;
     }
     public static void load(java.nio.file.Path configDirectory) {

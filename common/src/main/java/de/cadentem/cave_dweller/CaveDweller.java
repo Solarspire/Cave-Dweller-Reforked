@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -46,7 +46,7 @@ public class CaveDweller {
         Iterable<ServerLevel> levels = server.getAllLevels();
         if (TIMERS.isEmpty()) {
             for (ServerLevel level : levels) {
-                key = level.dimension().identifier().toString();
+                key = level.dimension().location().toString();
                 boolean isRelevant = ((List)ServerConfig.DIMENSION_WHITELIST.get()).contains(key);
                 if (!isRelevant) continue;
                 TIMERS.put(key, new Timer());
@@ -58,7 +58,7 @@ public class CaveDweller {
             RELOAD_MISSING = false;
         } else if (RELOAD_MISSING) {
             for (ServerLevel level : levels) {
-                key = level.dimension().identifier().toString();
+                key = level.dimension().location().toString();
                 boolean isRelevant = TIMERS.get(key) == null && ((List)ServerConfig.DIMENSION_WHITELIST.get()).contains(key);
                 if (!isRelevant) continue;
                 TIMERS.put(key, new Timer());
@@ -66,7 +66,7 @@ public class CaveDweller {
             RELOAD_MISSING = false;
         }
         for (ServerLevel level : levels) {
-            key = level.dimension().identifier().toString();
+            key = level.dimension().location().toString();
             if (TIMERS.get(key) == null) continue;
             this.handleLogic(level);
         }
@@ -80,7 +80,7 @@ public class CaveDweller {
         if (players.isEmpty()) {
             return;
         }
-        String key = level.dimension().identifier().toString();
+        String key = level.dimension().location().toString();
         Timer timer = TIMERS.get(key);
         if (timer.currentVictim == null || players.stream().filter(element -> element.getStringUUID().equals(timer.currentVictim.getStringUUID())).toList().isEmpty()) {
             timer.currentVictim = (Entity)players.get(RANDOM.nextInt(players.size()));
@@ -114,7 +114,7 @@ public class CaveDweller {
     }
 
     private boolean playCaveSoundToSpelunkers(ServerPlayer player) {
-        Identifier soundLocation = switch (RANDOM.nextInt(4)) {
+        ResourceLocation soundLocation = switch (RANDOM.nextInt(4)) {
             case 1 -> ((SoundEvent)ModSounds.CAVENOISE_2.get()).location();
             case 2 -> ((SoundEvent)ModSounds.CAVENOISE_3.get()).location();
             case 3 -> ((SoundEvent)ModSounds.CAVENOISE_4.get()).location();
@@ -133,7 +133,7 @@ public class CaveDweller {
         }
         Level serverLevel = player.level();
         int actualSkyLightLevel = serverLevel.getBrightness(LightLayer.SKY, player.blockPosition()) - serverLevel.getSkyDarken();
-        float sunAngle = serverLevel.environmentAttributes().getValue(net.minecraft.world.attribute.EnvironmentAttributes.SUN_ANGLE, player.position()) * Mth.DEG_TO_RAD;
+        float sunAngle = serverLevel.getSunAngle(1.0f);
         if (actualSkyLightLevel > 0) {
             float f1 = sunAngle < (float)Math.PI ? 0.0f : (float)Math.PI * 2;
             sunAngle += (f1 - sunAngle) * 0.2f;
@@ -165,7 +165,7 @@ public class CaveDweller {
         }
     }
 
-    public static void playPrivateSound(ServerPlayer player, Identifier sound, float volume, float pitch) {
+    public static void playPrivateSound(ServerPlayer player, ResourceLocation sound, float volume, float pitch) {
         var event = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.getValue(sound);
         if (event == null) return;
         player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
