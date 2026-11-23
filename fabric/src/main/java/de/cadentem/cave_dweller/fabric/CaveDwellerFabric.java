@@ -26,7 +26,7 @@ public final class CaveDwellerFabric implements ModInitializer {
         ModEntityTypes.CAVE_DWELLER = () -> type;
         FabricDefaultAttributeRegistry.register(type, CaveDwellerEntity.getAttributeBuilder());
         var eggKey = ResourceKey.create(Registries.ITEM, id("cave_dweller_spawn_egg"));
-        Item egg = Registry.register(BuiltInRegistries.ITEM, eggKey, new SpawnEggItem(type, new Item.Properties().setId(eggKey)));
+        Item egg = Registry.register(BuiltInRegistries.ITEM, eggKey, new SpawnEggItem(type, 0xC4C4C4, 0x0C0F3D, new Item.Properties().setId(eggKey)));
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
         ModSounds.CAVENOISE_1 = registerSound("cavenoise_1");
         ModSounds.CAVENOISE_2 = registerSound("cavenoise_2");

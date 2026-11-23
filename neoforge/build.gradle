@@ -11,8 +11,8 @@ neoForge {
 dependencies {
     jarJar(implementation("software.bernie.geckolib:geckolib-neoforge-${minecraft_version}")) {
         version {
-            strictly "[${geckolib_version},5)"
-            prefer geckolib_version
+            strictly "[${neoforge_geckolib_version},5)"
+            prefer neoforge_geckolib_version
         }
     }
 }
