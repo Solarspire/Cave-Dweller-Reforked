@@ -20,7 +20,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.SpawnUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.lighting.LayerLightEventListener;
@@ -101,7 +101,7 @@ public class CaveDweller {
         if (timer.isSpawnTimerReached() && caveDwellerCount.get() < (Integer)ServerConfig.MAXIMUM_AMOUNT.get() && RANDOM.nextDouble() <= (Double)ServerConfig.SPAWN_CHANCE_PER_TICK.get() && timer.currentVictim != null) {
             level.getPlayers(this::playCaveSoundToSpelunkers);
             timer.resetNoiseTimer();
-            Optional<CaveDwellerEntity> optionalEntity = Utils.trySpawnMob(timer.currentVictim, ModEntityTypes.CAVE_DWELLER.get(), MobSpawnType.TRIGGERED, level, timer.currentVictim.blockPosition(), 40, 35, 6, SpawnUtil.Strategy.ON_TOP_OF_COLLIDER);
+            Optional<CaveDwellerEntity> optionalEntity = Utils.trySpawnMob(timer.currentVictim, ModEntityTypes.CAVE_DWELLER.get(), EntitySpawnReason.TRIGGERED, level, timer.currentVictim.blockPosition(), 40, 35, 6, SpawnUtil.Strategy.ON_TOP_OF_COLLIDER);
             if (optionalEntity.isPresent()) {
                 CaveDwellerEntity caveDweller = (CaveDwellerEntity)((Object)optionalEntity.get());
                 caveDweller.setInvisible(true);
@@ -115,10 +115,10 @@ public class CaveDweller {
 
     private boolean playCaveSoundToSpelunkers(ServerPlayer player) {
         ResourceLocation soundLocation = switch (RANDOM.nextInt(4)) {
-            case 1 -> ((SoundEvent)ModSounds.CAVENOISE_2.get()).getLocation();
-            case 2 -> ((SoundEvent)ModSounds.CAVENOISE_3.get()).getLocation();
-            case 3 -> ((SoundEvent)ModSounds.CAVENOISE_4.get()).getLocation();
-            default -> ((SoundEvent)ModSounds.CAVENOISE_1.get()).getLocation();
+            case 1 -> ((SoundEvent)ModSounds.CAVENOISE_2.get()).location();
+            case 2 -> ((SoundEvent)ModSounds.CAVENOISE_3.get()).location();
+            case 3 -> ((SoundEvent)ModSounds.CAVENOISE_4.get()).location();
+            default -> ((SoundEvent)ModSounds.CAVENOISE_1.get()).location();
         };
         playPrivateSound(player, soundLocation, 2.0f, 1.0f);
         return true;
@@ -166,7 +166,7 @@ public class CaveDweller {
     }
 
     public static void playPrivateSound(ServerPlayer player, ResourceLocation sound, float volume, float pitch) {
-        var event = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.get(sound);
+        var event = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.getValue(sound);
         if (event == null) return;
         player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
                 net.minecraft.core.Holder.direct(event), net.minecraft.sounds.SoundSource.AMBIENT,

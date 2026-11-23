@@ -9,14 +9,17 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
+import software.bernie.geckolib.renderer.GeoRenderer;
 
 public class CaveDwellerModel
 extends GeoModel<CaveDwellerEntity> {
-    public ResourceLocation getModelResource(CaveDwellerEntity ignored) {
+    @Override
+    public ResourceLocation getModelResource(CaveDwellerEntity ignored, GeoRenderer<CaveDwellerEntity> renderer) {
         return ResourceLocation.fromNamespaceAndPath("cave_dweller", "geo/cave_dweller.geo" + Utils.getTextureAppend() + ".json");
     }
 
-    public ResourceLocation getTextureResource(CaveDwellerEntity ignored) {
+    @Override
+    public ResourceLocation getTextureResource(CaveDwellerEntity ignored, GeoRenderer<CaveDwellerEntity> renderer) {
         return ResourceLocation.fromNamespaceAndPath("cave_dweller", "textures/entity/cave_dweller_texture" + Utils.getTextureAppend() + ".png");
     }
 

@@ -5,6 +5,7 @@ import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
 import de.cadentem.cave_dweller.entities.goals.Roll;
 import de.cadentem.cave_dweller.util.Utils;
 import java.util.EnumSet;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -152,7 +153,7 @@ extends Goal {
         if (distanceToTarget <= attackReach && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
             this.caveDweller.swing(InteractionHand.MAIN_HAND);
-            this.caveDweller.doHurtTarget((Entity)target);
+            this.caveDweller.doHurtTarget((ServerLevel)this.caveDweller.level(), target);
         }
     }
 

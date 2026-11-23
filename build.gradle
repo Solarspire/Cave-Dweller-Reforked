@@ -27,7 +27,7 @@ subprojects {
     tasks.withType(Test).configureEach { useJUnitPlatform() }
     processResources {
         def props = [version: project.version, minecraft_version: minecraft_version, java_version: java_version,
-                     fabric_loader_version: fabric_loader_version, geckolib_version: geckolib_version]
+                     fabric_loader_version: fabric_loader_version, neoforge_version: neoforge_version, geckolib_version: geckolib_version]
         inputs.properties props
         filesMatching(['fabric.mod.json', 'META-INF/neoforge.mods.toml']) { expand props }
     }

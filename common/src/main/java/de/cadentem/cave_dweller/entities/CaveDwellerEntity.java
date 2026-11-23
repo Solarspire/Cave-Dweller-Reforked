@@ -34,7 +34,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -106,7 +106,7 @@ implements GeoEntity {
     }
 
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnData) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull EntitySpawnReason reason, @Nullable SpawnGroupData spawnData) {
         this.setAttribute(this.getAttribute(Attributes.MAX_HEALTH), (Double)ServerConfig.MAX_HEALTH.get());
         this.setAttribute(this.getAttribute(Attributes.ATTACK_DAMAGE), (Double)ServerConfig.ATTACK_DAMAGE.get());
         this.setAttribute(this.getAttribute(Attributes.ATTACK_SPEED), (Double)ServerConfig.ATTACK_SPEED.get());
@@ -273,7 +273,7 @@ implements GeoEntity {
         CaveDwellerNavigation navigation = new CaveDwellerNavigation(this, level);
         navigation.setMaxVisitedNodesMultiplier(4.0f);
         navigation.setCanOpenDoors(true);
-        navigation.setCanPassDoors(true);
+        navigation.getNodeEvaluator().setCanPassDoors(true);
         return navigation;
     }
 
@@ -371,7 +371,7 @@ implements GeoEntity {
     }
 
     public void playDisappearSound() {
-        this.playBlockPosSound(((SoundEvent)ModSounds.DISAPPEAR.get()).getLocation(), 3.0f, 1.0f);
+        this.playBlockPosSound(((SoundEvent)ModSounds.DISAPPEAR.get()).location(), 3.0f, 1.0f);
     }
 
     public void playFleeSound() {
@@ -480,7 +480,7 @@ implements GeoEntity {
         this.stopStareSound();
         super.tickDeath();
         if (!this.alreadyPlayedDeathSound) {
-            this.playBlockPosSound(((SoundEvent)ModSounds.DWELLER_DEATH.get()).getLocation(), 2.0f, 1.0f);
+            this.playBlockPosSound(((SoundEvent)ModSounds.DWELLER_DEATH.get()).location(), 2.0f, 1.0f);
             this.alreadyPlayedDeathSound = true;
         }
     }
@@ -515,7 +515,7 @@ implements GeoEntity {
         double d2 = this.getY() + ((double)this.getRandom().nextInt((int)radius) - radius / 2.0) - targetPosition.y * radius;
         double d3 = this.getZ() + (this.getRandom().nextDouble() - 0.5) * (radius / 2.0) - targetPosition.z * radius;
         BlockPos.MutableBlockPos validPosition = new BlockPos.MutableBlockPos(d1, d2, d3);
-        while (validPosition.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState((BlockPos)validPosition).blocksMotion()) {
+        while (validPosition.getY() > this.level().getMinY() && !this.level().getBlockState((BlockPos)validPosition).blocksMotion()) {
             validPosition.move(Direction.DOWN);
         }
         this.teleportTo(validPosition.getX(), validPosition.getY(), validPosition.getZ());
@@ -551,15 +551,15 @@ implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         boolean obstructed = source.is(net.minecraft.world.damagesource.DamageTypes.DROWN)
                 || source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD);
         if (obstructed || source.is(net.minecraft.world.damagesource.DamageTypes.IN_WALL)
                 || source.is(net.minecraft.world.damagesource.DamageTypes.FALL)) {
-            if (obstructed && !level().isClientSide && ++obstructedHits > 5) {
+            if (obstructed && ++obstructedHits > 5) {
                 obstructedHits = 0;
                 if (!teleportToTarget()) {
-                    String key = level().dimension().location().toString();
+                    String key = level.dimension().location().toString();
                     de.cadentem.cave_dweller.CaveDweller.speedUpTimers(key,
                             (int)(ServerConfig.CAN_SPAWN_MIN.get() * 0.3),
                             (int)(ServerConfig.RESET_NOISE_MIN.get() * 0.3));
@@ -569,6 +569,6 @@ implements GeoEntity {
             }
             return false;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(level, source, amount);
     }
 }
