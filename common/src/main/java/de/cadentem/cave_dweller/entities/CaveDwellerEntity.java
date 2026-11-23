@@ -552,8 +552,8 @@ implements GeoEntity {
     }
 
     @Override
-    public void knockback(double strength, double x, double z, DamageSource source, float damage, boolean flag) {
-        if (!isClimbing()) super.knockback(strength, x, z, source, damage, flag);
+    public void knockback(double strength, double x, double z) {
+        if (!isClimbing()) super.knockback(strength, x, z);
     }
 
     @Override
