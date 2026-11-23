@@ -1,14 +1,14 @@
-# Cave Dweller Reforked - Minecraft 26.2
+# Cave Dweller Reforked - Minecraft 1.21.9
 
 Fabric and NeoForge ports of Cadentem's Minecraft 1.20.1 / Cave Dweller 1.6.4.
 The original 1.12.2 backport remains on `main`.
 
 ## Installation
 
-- Requires Minecraft 26.2 and Java 25.
+- Requires Minecraft 1.21.9 and Java 21.
 - Install the JAR matching your loader: Fabric or NeoForge.
 - Fabric also requires Fabric API.
-- GeckoLib 5.5.5 is bundled. A compatible standalone GeckoLib JAR
+- A GeckoLib 5.3-alpha-3 backport for Minecraft 1.21.9 is bundled. A compatible standalone GeckoLib JAR
   for the same Minecraft version and loader takes priority; only one copy loads.
 
 ## Gameplay and settings
@@ -29,7 +29,7 @@ The Cave Dweller spawn egg is in the Spawn Eggs creative tab. Commands:
 
 ## Building
 
-Use installed Gradle 9.5.1:
+Use installed Gradle 9.5.1. The local Maven repository in `libs/` supplies the GeckoLib backport.
 
 ```shell
 gradle build
