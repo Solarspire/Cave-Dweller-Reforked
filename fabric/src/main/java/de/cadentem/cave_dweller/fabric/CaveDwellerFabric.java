@@ -11,6 +11,8 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.*;
@@ -18,12 +20,13 @@ import net.minecraft.world.item.*;
 public final class CaveDwellerFabric implements ModInitializer {
     public void onInitialize() {
         ServerConfig.load(FabricLoader.getInstance().getConfigDir());
-        var type = Registry.register(BuiltInRegistries.ENTITY_TYPE, id("cave_dweller"),
-                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build("cave_dweller:cave_dweller"));
+        var typeKey = ResourceKey.create(Registries.ENTITY_TYPE, id("cave_dweller"));
+        var type = Registry.register(BuiltInRegistries.ENTITY_TYPE, typeKey,
+                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build(typeKey));
         ModEntityTypes.CAVE_DWELLER = () -> type;
         FabricDefaultAttributeRegistry.register(type, CaveDwellerEntity.getAttributeBuilder());
-        Item egg = Registry.register(BuiltInRegistries.ITEM, id("cave_dweller_spawn_egg"),
-                new SpawnEggItem(type, 0xC4C4C4, 0x0C0F3D, new Item.Properties()));
+        var eggKey = ResourceKey.create(Registries.ITEM, id("cave_dweller_spawn_egg"));
+        Item egg = Registry.register(BuiltInRegistries.ITEM, eggKey, new SpawnEggItem(type, new Item.Properties().setId(eggKey)));
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS).register(entries -> entries.accept(egg));
         ModSounds.CAVENOISE_1 = registerSound("cavenoise_1");
         ModSounds.CAVENOISE_2 = registerSound("cavenoise_2");

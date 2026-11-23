@@ -1,40 +1,34 @@
 package de.cadentem.cave_dweller.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import de.cadentem.cave_dweller.client.CaveDwellerEyesLayer;
-import de.cadentem.cave_dweller.client.CaveDwellerModel;
 import de.cadentem.cave_dweller.entities.CaveDwellerEntity;
-import de.cadentem.cave_dweller.util.Utils;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.GeoRenderer;
 
-public class CaveDwellerRenderer
-extends GeoEntityRenderer<CaveDwellerEntity> {
+public final class CaveDwellerRenderer extends GeoEntityRenderer<CaveDwellerEntity, CaveDwellerRenderState> {
     public CaveDwellerRenderer(EntityRendererProvider.Context context) {
-        super(context, (GeoModel)new CaveDwellerModel());
+        super(context, new CaveDwellerModel());
         this.shadowRadius = 0.3f;
-        this.addRenderLayer(new CaveDwellerEyesLayer((GeoRenderer<CaveDwellerEntity>)this));
+        addRenderLayer(new CaveDwellerEyesLayer(this));
     }
 
-    @NotNull
-    public ResourceLocation getTextureLocation(@NotNull CaveDwellerEntity instance) {
-        return ResourceLocation.fromNamespaceAndPath("cave_dweller", "textures/entity/cave_dweller_texture" + Utils.getTextureAppend() + ".png");
+    @Override
+    protected CaveDwellerRenderState createBaseRenderState(CaveDwellerEntity entity) {
+        return new CaveDwellerRenderState();
     }
 
-    public void render(CaveDwellerEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
-        poseStack.pushPose();
-        if (entity.isBaby()) {
-            poseStack.scale(0.1f, 0.1f, 0.1f);
-        } else {
-            poseStack.scale(1.3f, 1.3f, 1.3f);
-        }
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
-        poseStack.popPose();
+    @Override
+    public void addRenderData(CaveDwellerEntity entity, Void unused, CaveDwellerRenderState state) {
+        boolean moving = state.getOrDefaultGeckolibData(DataTickets.IS_MOVING, false);
+        state.addGeckolibData(CaveDwellerEntity.ANIMATION, entity.selectAnimation(moving));
+    }
+
+    @Override
+    public void scaleModelForRender(CaveDwellerRenderState state, float width, float height,
+                                    PoseStack poseStack, BakedGeoModel model, boolean isReRender) {
+        float scale = state.isBaby ? 0.1f : 1.3f;
+        super.scaleModelForRender(state, scale, scale, poseStack, model, isReRender);
     }
 }

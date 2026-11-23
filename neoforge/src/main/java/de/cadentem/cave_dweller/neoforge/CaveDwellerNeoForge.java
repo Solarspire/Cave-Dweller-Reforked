@@ -11,10 +11,10 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.event.server.*;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.item.*;
@@ -23,11 +23,11 @@ public final class CaveDwellerNeoForge {
     public CaveDwellerNeoForge(IEventBus bus) {
         ServerConfig.load(FMLPaths.CONFIGDIR.get());
         var entities = DeferredRegister.create(Registries.ENTITY_TYPE, "cave_dweller");
-        ModEntityTypes.CAVE_DWELLER = entities.register("cave_dweller", () ->
-                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f).build("cave_dweller:cave_dweller"));
+        ModEntityTypes.CAVE_DWELLER = entities.register("cave_dweller", id ->
+                EntityType.Builder.of(CaveDwellerEntity::new, MobCategory.MONSTER).sized(0.5f, 2.7f)
+                        .build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
         var items = DeferredRegister.createItems("cave_dweller");
-        var egg = items.register("cave_dweller_spawn_egg", () ->
-                new DeferredSpawnEggItem(ModEntityTypes.CAVE_DWELLER, 0xC4C4C4, 0x0C0F3D, new Item.Properties()));
+        var egg = items.registerItem("cave_dweller_spawn_egg", properties -> new SpawnEggItem(ModEntityTypes.CAVE_DWELLER.get(), properties));
         var sounds = DeferredRegister.create(Registries.SOUND_EVENT, "cave_dweller");
         ModSounds.CAVENOISE_1 = sounds.register("cavenoise_1", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("cave_dweller", "cavenoise_1")));
         ModSounds.CAVENOISE_2 = sounds.register("cavenoise_2", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("cave_dweller", "cavenoise_2")));
