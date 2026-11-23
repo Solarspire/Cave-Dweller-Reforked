@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>software.bernie.geckolib</groupId>
+  <artifactId>geckolib-neoforge-1.21.2</artifactId>
+  <versioning>
+    <versions>
+      <version>4.7.3+cdw.mc1.21.2</version>
+    </versions>
+  </versioning>
+</metadata>

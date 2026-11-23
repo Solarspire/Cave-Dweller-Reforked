@@ -1,2 +1,5 @@
 # Preserve reference asset bytes on Windows checkouts.
 common/src/main/resources/assets/** -text whitespace=cr-at-eol
+
+# Preserve the upstream patch context.
+libs/geckolib-1.21.2.patch -text -whitespace

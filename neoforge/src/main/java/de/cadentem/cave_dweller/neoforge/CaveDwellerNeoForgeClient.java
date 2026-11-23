@@ -7,7 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-@EventBusSubscriber(modid = "cave_dweller", value = Dist.CLIENT)
+@EventBusSubscriber(modid = "cave_dweller", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class CaveDwellerNeoForgeClient {
     @SubscribeEvent public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         CaveDwellerEntity.clientStareAudio = CaveDwellerStareSound::setPlaying;

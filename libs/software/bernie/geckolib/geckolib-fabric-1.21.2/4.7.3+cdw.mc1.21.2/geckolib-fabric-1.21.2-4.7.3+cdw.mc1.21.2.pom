@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>software.bernie.geckolib</groupId>
+  <artifactId>geckolib-fabric-1.21.2</artifactId>
+  <version>4.7.3+cdw.mc1.21.2</version>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/license/mit</url>
+    </license>
+  </licenses>
+</project>

@@ -6,3 +6,9 @@ Reference SHA256: 2c243cad05887b40841401abdbb6256473ef4a05be65fc076d68dba34a90d8
 Sound assets imported from Fade's provided 1.12.2 backport JAR.
 Audio source SHA256: 2955e8ad39bbae916a6dc72f07806cfd30901928a64222f339596190e9961e98.
 Modern gameplay remains based on Cadentem's 1.20.1 reference.
+
+GeckoLib 4.7.3+cdw.mc1.21.2 is bundled as a separate MIT-licensed mod.
+Upstream source is https://github.com/bernie-g/geckolib/commit/01c4209736cd9089a208fe94c742024eb78cee96
+The Minecraft 1.21.2 backport patch and upstream license are in libs/.
+Build the patched source with Java 21, Gradle 8.10.2, and tasks :fabric:remapJar
+and :neoforge:jar. Each bundled GeckoLib JAR contains the upstream license.
